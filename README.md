@@ -3,3 +3,6 @@ Fast APIs
 
 1. **main.py**
     - install fastapi and pyd
+    - home, about, view
+
+2. **patient.json**
