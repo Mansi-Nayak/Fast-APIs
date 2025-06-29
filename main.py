@@ -14,3 +14,7 @@ app = FastAPI()
 @app.get("/")
 def hello():
     return {'message': 'Hello World'}
+
+@app.get('/about')
+def about():
+    return {'message': 'This is a discription for Fast Apis'}
