@@ -1,0 +1,63 @@
+"""
+This script defines a Pydantic model `Patient` to validate and structure 
+patient data.It includes various field types like strings, emails, URLs, 
+integers, floats, booleans, lists, and dictionaries.  The model uses 
+constraints such as max_length, value ranges, and field annotations for 
+clarity and validation.`EmailStr` and `AnyUrl` types ensure proper formatting 
+of email and URL inputs.Optional fields like `allergies` and `married` are 
+also handled gracefully.A function `update_patient_data` prints selected 
+patient data and confirms the update.The `patient_info` dictionary contains 
+sample data to demonstrate instantiation.The dictionary is unpacked into the 
+`Patient` model to create a `patient1` instance.Validation is automatically 
+enforced during model creation using Pydantic.The validated data is then 
+passed to the `update_patient_data` function.
+"""
+
+from typing import Annotated, Dict, List, Optional
+
+from pydantic import AnyUrl, BaseModel, EmailStr, Field
+
+
+class Patient(BaseModel):
+
+    name: Annotated[
+        str,
+        Field(
+            max_length=50,
+            title="Name of the patient",
+            description="Give the name of the patient in less than 50 chars",
+            examples=["Nitish", "Amit"],
+        ),
+    ]
+    email: EmailStr
+    linkedin_url: AnyUrl
+    age: int = Field(gt=0, lt=120)
+    weight: Annotated[float, Field(gt=0, strict=True)]
+    married: Annotated[
+        bool, Field(default=None, description="Is the patient married or not")
+    ]
+    allergies: Annotated[Optional[List[str]], Field(default=None, max_length=5)]
+    contact_details: Dict[str, str]
+
+
+def update_patient_data(patient: Patient):
+
+    print(patient.name)
+    print(patient.age)
+    print(patient.allergies)
+    print(patient.married)
+    print("updated")
+
+
+patient_info = {
+    "name": "nitish",
+    "email": "abc@gmail.com",
+    "linkedin_url": "http://linkedin.com/1322",
+    "age": "30",
+    "weight": 75.2,
+    "contact_details": {"phone": "2353462"},
+}
+
+patient1 = Patient(**patient_info)
+
+update_patient_data(patient1)
